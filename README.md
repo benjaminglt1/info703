@@ -1,6 +1,9 @@
 KITSCHMINYOF Stephan
+
 GALLET Benjamin
+
 M1-INFO     GRP-2
+
 # TP Compilation : Génération d'arbres abstraits
 
 ## Compte-rendu TP 2
@@ -41,4 +44,5 @@ Donne :
 
 # Changements
 Ajout d'une classe Arbre qui va donc permet de créer l'arbre associé aux actions que l'on rentre.
+
 Modification du fichier cup pour qu'il génère l'arbre en fonction des éléments reconnus par la grammaire.
