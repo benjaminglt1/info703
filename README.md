@@ -17,7 +17,7 @@ L'expression
 
 ```
 let prixTtc =  prixHt * 119 / 100;
-prixTtc + 100
+prixTtc + 100.
 ```
 donne :
 `(; (LET prixTtc (/ (* prixHt 119) 100)) (+ prixTtc 100))`
