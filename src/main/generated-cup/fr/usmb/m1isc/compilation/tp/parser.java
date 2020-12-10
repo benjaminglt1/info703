@@ -288,7 +288,7 @@ class CUP$parser$actions {
 		int sleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int sright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object s = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
- System.out.println(s); 
+ RESULT = (Arbre) s; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("NT$0",4, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
