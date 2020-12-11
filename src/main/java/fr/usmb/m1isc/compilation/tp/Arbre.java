@@ -1,8 +1,11 @@
 package fr.usmb.m1isc.compilation.tp;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Arbre {
 	String racine;
@@ -113,55 +116,103 @@ public class Arbre {
 	 
 
 	 public void ecrire(String g,String op, String d,PrintWriter f) {
+		 boolean gm = g.contains("+") || g.contains("-") || g.contains("*") || g.contains("/");
+		 
+		 boolean dm = d.contains("+") || d.contains("-") || d.contains("*") || d.contains("/");
+		 //System.err.println(dm);
 		 switch(op) {
 		 	case "LET":
 		 		System.err.println("let");
-		 		f.println("    mov eax,"+ d);
+		 		if(dm) {
+		 			f.println("    pop eax");
+		 		}else {
+		 			f.println("    mov eax, "+ d);
+		 		}
+		 		
 		 		f.println("    mov "+ g +", eax");
+		 		f.println("    push eax");
 		 		break;
 		 		
 		 	case "+":
 		 		System.err.println("+");
-		 		f.println("    mov eax,"+ g);
-		 		f.println("    push eax");
-		 		f.println("    mov eax,"+d);
+		 		
 		 		f.println("    pop ebx");
-		 		f.println("    add eax,ebx");
+		 		f.println("    pop eax");
+		 		f.println("    add eax, ebx");
+		 		f.println("    push eax");
 		 		break;
 				 
 		 	case "-":
 		 		System.err.println("-");
-		 		f.println("    mov eax,"+ g);
-		 		f.println("    push eax");
-		 		f.println("    mov eax,"+d);
 		 		f.println("    pop ebx");
-		 		f.println("    sub eax,ebx");
+		 		f.println("    pop eax");
+		 		f.println("    sub eax, ebx");
+		 		f.println("    push eax");
 		 		break;
 				 
 		 	case "*":
 		 		System.err.println("*");
-		 		f.println("    mov eax,"+ g);
+		 		if(dm) {
+		 			f.println("    pop eax");
+		 		}else {
+		 			f.println("    mov eax, "+g);
+		 		}
+		 		
+		 		if(gm) {
+		 			f.println("    pop ebx");
+		 		}else {
+		 			f.println("    mov ebx, "+d);
+		 		}
+		 		
+		 		f.println("    mul eax, ebx");
 		 		f.println("    push eax");
-		 		f.println("    mov eax,"+d);
-		 		f.println("    pop ebx");
-		 		f.println("    mul eax,ebx");
 		 		break;
-				 
+
 		 	case "/":
 		 		System.err.println("/");
-		 		f.println("    mov eax,"+ d);
+		 		if(dm) {
+		 			f.println("    pop ebx");
+		 		}else {
+		 			f.println("    mov ebx, "+d);
+		 		}if(gm) {
+		 			f.println("    pop eax");
+		 		}else {
+		 			f.println("    mov eax, "+g);
+		 		}
+		 		
+		 		
+		 		f.println("    div ebx, eax");
+		 		f.println("    mov eax, ebx");
 		 		f.println("    push eax");
-		 		f.println("    mov eax,"+g);
-		 		f.println("    pop ebx");
-		 		f.println("    div eax,ebx");
 		 		break;
 		 	
+		 	case "<":
+		 		ecrire(g,"-", d, f);
+		 		f.println("    pop eax");
+		 		f.println("    jl vrai");
+		 		f.println("    push 0");
+		 		f.println("    jmp fin");
+		 		f.println("    vrai : push 1");
+		 		f.println("    fin :");
+		 		break;
+		 		
+		 	case ">":
+		 		ecrire(d,"-", g, f);
+		 		f.println("    pop eax");
+		 		f.println("    jl vrai");
+		 		f.println("    push 0");
+		 		f.println("    jmp fin");
+		 		f.println("    vrai : push 1");
+		 		f.println("    fin :");
+		 		break;
 		 }
+		
 	 }
 	 
 	 public void code(Arbre g, String r, Arbre d, PrintWriter f) {
 		 if(g.estfeuille() && d.estfeuille()) {
 			 ecrire(g.racine,r,d.racine,f);
+			 
 		 }else if(g.estfeuille() && !d.estfeuille()){
 			 code(d.fg,d.racine,d.fd,f);
 			 ecrire(g.racine,r,d.racine,f);
@@ -173,7 +224,8 @@ public class Arbre {
 			 code(d.fg,d.racine,d.fd,f);
 			 
 			 ecrire(g.racine,r,d.racine,f);
-		 } 
+		 }
+		 
 	 }
 	 
 	 public void convertToAsm(String fichier) throws FileNotFoundException, UnsupportedEncodingException {
@@ -191,6 +243,7 @@ public class Arbre {
 		 f.println("CODE ENDS");
 		 
 		 f.close();
+		 
 		 
 	 }
 }

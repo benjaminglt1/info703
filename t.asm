@@ -3,18 +3,19 @@ DATA SEGMENT
 	prixTtc DD
 DATA ENDS
 CODE SEGMENT
-    mov eax,200
+    mov eax, 200
     mov prixHt, eax
-    mov eax,prixHt
     push eax
-    mov eax,119
-    pop ebx
-    mul eax,ebx
-    mov eax,100
+    mov eax, prixHt
+    mov ebx, 119
+    mul eax, ebx
     push eax
-    mov eax,*
-    pop ebx
-    div eax,ebx
-    mov eax,/
+    mov ebx, 100
+    pop eax
+    div ebx, eax
+    mov eax, ebx
+    push eax
+    pop eax
     mov prixTtc, eax
+    push eax
 CODE ENDS
