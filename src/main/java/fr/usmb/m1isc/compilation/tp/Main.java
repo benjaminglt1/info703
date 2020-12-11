@@ -14,9 +14,16 @@ public class Main {
 		 if (args.length > 0)
 		        yy = new LexicalAnalyzer(new FileReader(args[0])) ;
 		    else {
+		    	//ex1
 		    	//Reader in0 = new StringReader("let prixHt = input;\r\nlet prixTtc = prixHt * 119 / 100;\r\noutput prixTtc ."); 
+		    	
+		    	//ex2
 		    	Reader in0 = new StringReader("let a = input;\r\nlet b = input;\r\nwhile (0 < b)\n\rdo (let aux=(a mod b); let a=b; let b=aux );\r\noutput a\n\r.");
+		    	
+		    	//autres tests
 		    	//Reader in0 = new StringReader("let a = 0 < 1;\r\noutput a .");
+		    	//Reader in0 = new StringReader("let aux = ((3 * 3) mod 3);\r\noutput aux\n\r.");
+		    	
 		    	yy = new LexicalAnalyzer(in0);
 		    }
 		@SuppressWarnings("deprecation")

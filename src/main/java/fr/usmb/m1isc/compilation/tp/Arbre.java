@@ -213,12 +213,12 @@ public class Arbre {
 		 		
 		 	case "OUTPUT":
 		 		System.err.println("output");
-		 		f.println("    pop eax");
+		 		f.println("    mov eax, "+g);
 		 		f.println("    out eax");
 		 		break;
 		 		
 		 	case "%":
-		 		System.err.println(g+"mod"+d);
+		 		System.err.println("mod");
 		 		f.println("    mov eax, "+d);
 		 		f.println("    push eax");
 		 		f.println("    mov eax, "+g);
@@ -227,8 +227,6 @@ public class Arbre {
 				f.println("    div ecx,ebx");
 				f.println("    mul ecx,ebx");
 				f.println("    sub eax,ecx");
-				f.println("    mov aux, eax");
-				f.println("    mov eax, aux");
 				f.println("    push eax");
 		 		break;
 		 		
@@ -245,7 +243,7 @@ public class Arbre {
 			 ecrire(g.racine,r," ",f);
 			 
 		 }else if(r == "WHILE") {
-			 System.err.println(d.fg+"while"+d.fd);
+			 System.err.println("while");
 			 f.println("debut_while_1:");
 		 	 //code condition
 			 	ecrire(g.fg.racine,g.racine,g.fd.racine,f);
@@ -257,6 +255,8 @@ public class Arbre {
 		 	 	code(d.fg,d.racine,new Arbre(" "),f);
 		 	 	f.println("    jmp debut_while_1");
 		 	 f.println("sortie_while_1:");
+		 }else if(r == "%") {
+			 System.err.println(g+"-MOD-"+d);
 		 }else if(g.estfeuille() && d.estfeuille()) {
 			 ecrire(g.racine,r,d.racine,f);
 			 
