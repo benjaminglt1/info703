@@ -255,8 +255,6 @@ public class Arbre {
 		 	 	code(d.fg,d.racine,new Arbre(" "),f);
 		 	 	f.println("    jmp debut_while_1");
 		 	 f.println("sortie_while_1:");
-		 }else if(r == "%") {
-			 System.err.println(g+"-MOD-"+d);
 		 }else if(g.estfeuille() && d.estfeuille()) {
 			 ecrire(g.racine,r,d.racine,f);
 			 
@@ -280,7 +278,7 @@ public class Arbre {
 	 }
 	 
 	 public void convertToAsm(String fichier) throws FileNotFoundException, UnsupportedEncodingException {
-		 PrintWriter f = new PrintWriter("t.asm", "UTF-8");
+		 PrintWriter f = new PrintWriter("temp.asm", "UTF-8");
 		 
 		 f.println("DATA SEGMENT");
 		 //les variables

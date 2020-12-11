@@ -34,7 +34,7 @@ public class Main {
 		
 		System.out.println(a);
 		
-		a.convertToAsm("t.asm");
+		a.convertToAsm("temp.asm");
 		
 	}
 
