@@ -49,10 +49,10 @@ CODE ENDS
 On peut donc tester le programme produit ett verfifier que l'on obtient bien les bon résultats.
 
 Sur cette première capture on rentre donc le nombre "200" on obtient donc en résultat 238 -> 200 * 119 / 100
-![Capture 1](./img/Capture1.png)
+![Capture 1](./img/Capture1.PNG)
 
 Sur la deuxième capture on obtient 1850 -> 1555 * 119 / 100 
-![Capture 2](./img/Capture2.png)
+![Capture 2](./img/Capture2.PNG)
 
 ## Exercice 2 :
 
@@ -127,8 +127,8 @@ CODE ENDS
 Ce programme permetant de calculer le PGCD de deux nombre qui sont entrés dans la console on remarque sur les deux capture suivantes que le résultat corespond bien au résuktats trouvé par la machine à registre.
 
 PGCD(60,36) -> 12
-![Capture 3](./img/Capture3.png)
+![Capture 3](./img/Capture3.PNG)
 
 PGCD(2322,654) -> 6
-![Capture 4](./img/Capture4.png)
+![Capture 4](./img/Capture4.PNG)
 ## Tests compémentaires :
