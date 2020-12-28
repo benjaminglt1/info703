@@ -72,12 +72,12 @@ sequence ::= expression:e1 SEMI sequence:e2 {: RESULT = new Arbre(";",(Arbre) e1
 expression ::= expr:e {: RESULT = (Arbre) e; :}
              | LET IDENT:nom EGAL expr:e  {: RESULT = new Arbre("LET",new Arbre(nom.toString()),(Arbre) e); :}		
              | WHILE expr:cond DO expression:e {: RESULT = new Arbre("WHILE",(Arbre) cond,new Arbre("DO",(Arbre) e,null)); :}
-             | IF expr:cond THEN expression:a1 ELSE expression:a2 {: RESULT = new Arbre("IF",(Arbre) cond,new Arbre("THEN",(Arbre) a1,new Arbre("else",(Arbre) a2,null))); :}
+             | IF expr:cond THEN expression:a1 ELSE expression:a2 {: RESULT = new Arbre("IF",(Arbre) cond,new Arbre("THEN",(Arbre) a1,new Arbre("ELSE",(Arbre) a2,null))); :}
              | error // reprise d'erreurs
 			 ;
 
 // 
-expr ::= NOT:op expr:e
+expr ::= NOT:op expr:e {: RESULT = new Arbre("!",(Arbre) e,null); :}
 	   | expr:e1 AND:and expr:e2 {: RESULT = new Arbre("&",(Arbre) e1,(Arbre) e2); :}
 	   | expr:e1 OR expr:e2 {: RESULT = new Arbre("|",(Arbre) e1,(Arbre) e2); :}
 	   | expr:e1 EGAL expr:e2 {: RESULT = new Arbre("=",(Arbre) e1,(Arbre) e2); :}

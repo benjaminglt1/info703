@@ -13,6 +13,7 @@ public class Arbre {
 	Arbre fd;
 	Arbre fg;
 	ArrayList<String> var = new ArrayList<String>();
+	int cpt = 0;
 	
 	
 	public Arbre(String val){
@@ -65,7 +66,7 @@ public class Arbre {
 	        }
 	    }
 	 
-	 public void parcourData(PrintWriter f) {
+	 public void data(PrintWriter f) {
 		 if (racine == "LET") { 
 			 if (fg!=null) {
 				 
@@ -79,17 +80,17 @@ public class Arbre {
 		 }
 		 if (fg!=null) {
 	            if (fd!=null) {
-	                fg.parcourData(f);
-	                fd.parcourData(f);
+	                fg.data(f);
+	                fd.data(f);
 	            }
 	            else {
-	                fg.parcourData(f);
+	                fg.data(f);
 	                
 	            }
 	        }
 	        else {
 	            if(fd!=null) {
-	                fd.parcourData(f);
+	                fd.data(f);
 	            }
 	            
 	        }
@@ -99,197 +100,259 @@ public class Arbre {
 		 return ((fg == null) && (fd == null));
 	 }
 	 
+	 public boolean estOperateur(String r) {
+		 return r.contains("+") || r.contains("-") || r.contains("*") || r.contains("/") || r.contains("INPUT") || r.contains("OUTPUT") || r.contains("%");
+	 }
 	 
-
-	 public void ecrire(String g,String op, String d,PrintWriter f) {
-		 boolean gm = g.contains("+") || g.contains("-") || g.contains("*") || g.contains("/") || g.contains("INPUT") || g.contains("OUTPUT") || g.contains("%");
-		 boolean dm = d.contains("+") || d.contains("-") || d.contains("*") || d.contains("/") || d.contains("INPUT") || d.contains("OUTPUT") || d.contains("%");
+	 public void code(Arbre g, String r, Arbre d, PrintWriter file) {
+		 boolean gm = false;
+		 boolean dm = false;
 		 
-		 System.out.println(g+op+d);
-		 switch(op) {
+		 System.err.println(g + " - " + d);
+		 if(g != null && d != null && !r.equals("WHILE") && !r.equals("IF") && !r.equals("|") && !r.equals("&") && !r.equals("!")){
+			 gm = estOperateur(g.racine);
+			 dm = estOperateur(d.racine);
+			 
+			 if (!g.estfeuille()) {
+				 if (!d.estfeuille()) {
+						 code(g.fg,g.racine,g.fd,file);
+						 code(d.fg,d.racine,d.fd,file);
+					 
+			         
+			     }else{
+			    	 code(g.fg,g.racine,g.fd,file);	                
+			     }
+			 }else {
+			     if(!d.estfeuille()) {
+			         code(d.fg,d.racine,d.fd,file);
+			     }
+			 }
+		}	 
+		 System.err.println("r = "+r);
+		 switch(r) {
 		 	case "LET":
 		 		System.err.println("let");
 		 		if(dm) {
-		 			if(d == "INPUT") {
+		 			if(d.racine == "INPUT") {
 		 				System.err.println("input");
-		 				f.println("    in eax");
+		 				file.println("    in eax");
 		 			}else {
-		 				f.println("    pop eax");
+		 				file.println("    pop eax");
 		 			}
 		 			
 		 		}else {
-		 			f.println("    mov eax, "+ d);
+		 			file.println("    mov eax, "+ d.racine);
 		 		}
 		 		
 		 		
-		 		f.println("    mov "+ g +", eax");
-		 		f.println("    push eax");
+		 		file.println("    mov "+ g.racine +", eax");
+		 		file.println("    push eax");
 		 		break;
 		 		
 		 	case "+":
-		 		System.err.println("+");
+		 		System.err.println("plus");
 		 		if(dm) {
-		 			f.println("    pop eax");
+		 			file.println("    pop eax");
 		 		}else {
-		 			f.println("    mov eax, "+g);
+		 			file.println("    mov eax, "+g.racine);
 		 		}
 		 		
 		 		if(gm) {
-		 			f.println("    pop ebx");
+		 			file.println("    pop ebx");
 		 		}else {
-		 			f.println("    mov ebx, "+d);
+		 			file.println("    mov ebx, "+d.racine);
 		 		}
-		 		f.println("    add eax, ebx");
-		 		f.println("    push eax");
+		 		file.println("    add eax, ebx");
+		 		file.println("    push eax");
 		 		break;
 				 
 		 	case "-":
-		 		System.err.println("-");
+		 		System.err.println("moins");
 		 		if(dm) {
-		 			f.println("    pop eax");
+		 			file.println("    pop eax");
 		 		}else {
-		 			f.println("    mov eax, "+g);
+		 			file.println("    mov eax, "+g.racine);
 		 		}
 		 		
 		 		if(gm) {
-		 			f.println("    pop ebx");
+		 			file.println("    pop ebx");
 		 		}else {
-		 			f.println("    mov ebx, "+d);
+		 			file.println("    mov ebx, "+d.racine);
 		 		}
-		 		f.println("    sub eax, ebx");
-		 		f.println("    push eax");
+		 		file.println("    sub eax, ebx");
+		 		file.println("    push eax");
 		 		break;
 				 
 		 	case "*":
-		 		System.err.println("*");
+		 		System.err.println("mul");
 		 		if(dm) {
-		 			f.println("    pop eax");
+		 			file.println("    pop eax");
 		 		}else {
-		 			f.println("    mov eax, "+g);
+		 			file.println("    mov eax, "+g.racine);
 		 		}
 		 		
 		 		if(gm) {
-		 			f.println("    pop ebx");
+		 			file.println("    pop ebx");
 		 		}else {
-		 			f.println("    mov ebx, "+d);
+		 			file.println("    mov ebx, "+d.racine);
 		 		}
-		 		
-		 		f.println("    mul eax, ebx");
-		 		f.println("    push eax");
+		 		file.println("    mul eax, ebx");
+		 		file.println("    push eax");
 		 		break;
 
 		 	case "/":
-		 		System.err.println("/");
+		 		System.err.println("div");
 		 		if(dm) {
-		 			f.println("    pop ebx");
+		 			file.println("    pop eax");
 		 		}else {
-		 			f.println("    mov ebx, "+d);
-		 		}if(gm) {
-		 			f.println("    pop eax");
-		 		}else {
-		 			f.println("    mov eax, "+g);
+		 			file.println("    mov eax, "+d.racine);
 		 		}
 		 		
-		 		
-		 		f.println("    div eax, ebx");
-		 		f.println("    push eax");
+		 		if(gm) {
+		 			file.println("    pop ebx");
+		 		}else {
+		 			file.println("    mov ebx, "+g.racine);
+		 		}
+		 		file.println("    div ebx, eax");
+		 		file.println("    push ebx");
 		 		break;
 		 	
+		 	case "<=":
+		 		System.err.println("plusPetitEqlQue");
+		 		code(g,"-", d, file);
+		 		file.println("    pop eax");
+		 		file.println("    jle faux_gt_1");
+		 		file.println("    mov eax,1");
+		 		file.println("    jmp sortie_gt_1");
+		 		break;
+		 		
 		 	case "<":
-		 		ecrire(g,"-", d, f);
-		 		f.println("    pop eax");
-		 		f.println("    jle faux_gt_1");
-		 		f.println("    mov eax,1");
-		 		f.println("    jmp sortie_gt_1");
+		 		System.err.println("plusPetitQue");
+		 		code(g,"-", d, file);
+		 		file.println("    pop eax");
+		 		file.println("    jle faux_gt_1");
+		 		file.println("    mov eax,1");
+		 		file.println("    jmp sortie_gt_1");
 		 		break;
-		 		
-		 	case ">":
-		 		ecrire(d,"-", g, f);
-		 		f.println("    pop eax");
-		 		f.println("    jle faux_gt_1");
-		 		f.println("    mov eax,1");
-		 		f.println("    jmp sortie_gt_1");
-		 		break;
-		 		
+		 	
 		 	case "OUTPUT":
 		 		System.err.println("output");
-		 		f.println("    mov eax, "+g);
-		 		f.println("    out eax");
+		 		file.println("    mov eax, "+g.racine);
+		 		file.println("    out eax");
 		 		break;
 		 		
 		 	case "%":
 		 		System.err.println("mod");
-		 		f.println("    mov eax, "+d);
-		 		f.println("    push eax");
-		 		f.println("    mov eax, "+g);
-		 		f.println("    pop ebx");
- 				f.println("    mov ecx,eax");
-				f.println("    div ecx,ebx");
-				f.println("    mul ecx,ebx");
-				f.println("    sub eax,ecx");
-				f.println("    push eax");
+		 		file.println("    mov eax, "+d.racine);
+		 		file.println("    push eax");
+		 		file.println("    mov eax, "+g.racine);
+		 		file.println("    pop ebx");
+ 				file.println("    mov ecx,eax");
+				file.println("    div ecx,ebx");
+				file.println("    mul ecx,ebx");
+				file.println("    sub eax,ecx");
+				file.println("    push eax");
+		 		break;
+		 	
+		 	case "WHILE":
+		 		System.err.println("while");
+		 		cpt++;
+		 		file.println("debut_while_"+cpt+":");
+			 	 //code condition
+				 	code(g.fg,g.racine,g.fd,file);
+				 file.println("faux_gt_"+cpt+":");
+				 //code si condition fausse 
+			 	 file.println("sortie_gt_"+cpt+":");
+			 	 //code si condition vraie
+			 		file.println("    jz sortie_while_"+cpt);
+			 	 	code(d.fg,d.racine,new Arbre(" "),file);
+			 	 	file.println("    jmp debut_while_"+cpt);
+			 	 
+			 	 file.println("sortie_while_"+cpt+":");
+		 		break;
+		 	
+		 	case "IF":
+		 		System.err.println("if");
+		 		System.out.println(d);
+		 		cpt++;
+		 		file.println("debut_if_"+cpt+":");
+			 	 //code condition
+				 	code(g.fg,g.racine,g.fd,file);
+				 file.println("sortie_gt_"+cpt+":");
+				 //code si condition fausse 
+				 code(d.fd.fg,d.fd.racine,new Arbre(" "),file);
+				 
+				 file.println("    jmp sortie_if_"+cpt);
+			 	 file.println("faux_gt_"+cpt+":");
+			 	 //code si condition vraie
+			 	code(d.fg,d.racine,new Arbre(" "),file);
+			 	 	
+			 	 file.println("sortie_if_"+cpt+":");
+		 		break;
+		 		
+		 	case "!":
+		 		System.err.println("not");
+		 		code(g.fg,"-", g.fg, file);
+		 		file.println("    pop eax");
+		 		file.println("    jle valide_gt_"+cpt);
+		 		break;
+		 		
+		 	case "&":
+		 		System.err.println("and");
+		 		code(g.fg,"-", g.fd, file);
+		 		file.println("    pop eax");
+		 		file.println("    jle faux"+cpt);
+		 		file.println("    jmp sortie_gt_"+cpt);
+		 		
+		 		code(d.fg,"-", d.fd, file);
+		 		file.println("    pop eax");
+		 		file.println("    jz valide_gt_"+cpt);
+		 		file.println("    jmp invalide_gt_"+cpt);
+		 		
+		 		file.println("invalide_gt_"+cpt+":");
+		 		file.println("    jmp sortie_gt_"+cpt);
+		 		
+		 		
+		 		file.println("valide_gt_"+cpt+":");
+		 		file.println("    mov eax,1");
+		 		file.println("    jmp faux_gt_"+cpt);
+		 		break;
+		 		
+		 	case "|":
+		 		System.err.println("OR");
+		 		code(g.fg,"-", g.fd, file);
+		 		file.println("    pop eax");
+		 		file.println("    jle faux_gt_"+cpt);
+		 		
+		 		code(d.fg,"-", d.fd, file);
+		 		file.println("    pop eax");
+		 		file.println("    jle faux_gt_"+cpt);
+		 		file.println("    mov eax,1");
+		 		file.println("    jmp sortie_gt_"+cpt);
+		 		
 		 		break;
 		 		
 		 	default:
-		 		System.err.println(g+";"+d);
+		 		System.err.println("default");
 		 		
 		 		
 		 }
-		
-	 }
-	 
-	 public void code(Arbre g, String r, Arbre d, PrintWriter f) {
-		 if(r == "OUTPUT") {
-			 ecrire(g.racine,r," ",f);
-			 
-		 }else if(r == "WHILE") {
-			 System.err.println("while");
-			 f.println("debut_while_1:");
-		 	 //code condition
-			 	ecrire(g.fg.racine,g.racine,g.fd.racine,f);
-			 f.println("faux_gt_1:");
-			 //code si condition fausse 
-		 	 f.println("vrai_gt_1:");
-		 	 //code si condition vraie
-		 		f.println("    jz sortie_while_1");
-		 	 	code(d.fg,d.racine,new Arbre(" "),f);
-		 	 	f.println("    jmp debut_while_1");
-		 	 f.println("sortie_while_1:");
-		 }else if(r == "%") {
-			 System.err.println(g+"-MOD-"+d);
-		 }else if(g.estfeuille() && d.estfeuille()) {
-			 ecrire(g.racine,r,d.racine,f);
-			 
-		 }else if(g.estfeuille() && !d.estfeuille()){
-			 code(d.fg,d.racine,d.fd,f);
-			 ecrire(g.racine,r,d.racine,f);
-		 }else if(!g.estfeuille() && d.estfeuille()) {
-			 code(g.fg,g.racine,g.fd,f);
-			 ecrire(g.racine,r,d.racine,f);
-		 }else {
-			 
-			 code(g.fg,g.racine,g.fd,f);
-			 if(d != null) {
-				 code(d.fg,d.racine,d.fd,f);
-			 }
-			 
-			 
-			 ecrire(g.racine,r,d.racine,f);
-		 }
+
+        
 		 
-	 }
-	 
+		 
+}
+
 	 public void convertToAsm(String fichier) throws FileNotFoundException, UnsupportedEncodingException {
-		 PrintWriter f = new PrintWriter("t.asm", "UTF-8");
+		 PrintWriter f = new PrintWriter(fichier, "UTF-8");
 		 
 		 f.println("DATA SEGMENT");
-		 //les variables
-		 	parcourData(f);
+		 //Génération des variables
+		 	data(f);
 		 f.println("DATA ENDS");
 		 
 		 f.println("CODE SEGMENT");
-		 //le code
-		 	//parcourOp(f);
+		 //Génération du code
 		 	code(fg,racine,fd,f);
 		 f.println("CODE ENDS");
 		 

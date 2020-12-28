@@ -3,7 +3,7 @@ DATA SEGMENT
 	b DD
 DATA ENDS
 CODE SEGMENT
-    mov eax, 2
+    mov eax, 4
     mov a, eax
     push eax
     mov eax, 3
