@@ -66,31 +66,33 @@ public class Arbre {
 	        }
 	    }
 	 
-	 public void data(PrintWriter f) {
+	 public void data(PrintWriter f,ArrayList<String> var) {
 		 if (racine == "LET") { 
 			 if (fg!=null) {
+				 System.out.println(var.toString());
+				 if(!var.contains(fg.racine)) {
+					 f.println("	"+fg.racine+" DD");
+					 var.add(fg.racine);
+				 }
+				 System.out.println(var.toString());
 				 
-				 //ne fonctionne pas - quand des var se repetent elles s'ajoutent aux var data
-				 var.add(fg.racine);
-				 //System.err.println(var.toString());
-				 f.println("	"+fg.racine+" DD");
 				 
 			 }
 			 
 		 }
 		 if (fg!=null) {
 	            if (fd!=null) {
-	                fg.data(f);
-	                fd.data(f);
+	                fg.data(f,var);
+	                fd.data(f,var);
 	            }
 	            else {
-	                fg.data(f);
+	                fg.data(f,var);
 	                
 	            }
 	        }
 	        else {
 	            if(fd!=null) {
-	                fd.data(f);
+	                fd.data(f,var);
 	            }
 	            
 	        }
@@ -230,9 +232,12 @@ public class Arbre {
 		 		System.err.println("plusPetitQue");
 		 		code(g,"-", d, file);
 		 		file.println("    pop eax");
-		 		file.println("    jle faux_gt_"+cpt);
-		 		file.println("    mov eax,1");
-		 		file.println("    jmp sortie_gt_"+cpt);
+		 		file.println("    jl vrai_gt_"+cpt);
+		 		file.println("    push 0");
+		 		file.println("    jmp fin_gt_"+cpt);
+		 		file.println("vrai_gt_"+cpt+":");
+		 		file.println("    push 1");
+		 		file.println("fin_gt_"+cpt+":");
 		 		break;
 		 	
 		 	case "OUTPUT":
@@ -350,7 +355,7 @@ public class Arbre {
 		 
 		 f.println("DATA SEGMENT");
 		 //Génération des variables
-		 	data(f);
+		 	data(f,var);
 		 f.println("DATA ENDS");
 		 
 		 f.println("CODE SEGMENT");

@@ -75,8 +75,6 @@ DATA SEGMENT
 	a DD
 	b DD
 	aux DD
-	a DD
-	b DD
 DATA ENDS
 CODE SEGMENT
     in eax
@@ -157,8 +155,6 @@ DATA SEGMENT
 	a DD
 	b DD
 	c DD
-	b DD
-	c DD
 DATA ENDS
 CODE SEGMENT
     in eax
@@ -176,15 +172,12 @@ debut_if_1:
     sub eax, ebx
     push eax
     pop eax
-    jle faux_gt_1
-    mov eax, a
-    mov ebx, 2
-    sub eax, ebx
-    push eax
-    pop eax
-    jle faux_gt_1
-    mov eax,1
-    jmp sortie_gt_1
+    jl vrai_gt_1
+    push 0
+    jmp fin_gt_1
+vrai_gt_1:
+    push 1
+fin_gt_1:
 sortie_gt_1:
 debut_while_2:
     mov eax, b
@@ -192,9 +185,12 @@ debut_while_2:
     sub eax, ebx
     push eax
     pop eax
-    jle faux_gt_2
-    mov eax,1
-    jmp sortie_gt_2
+    jl vrai_gt_2
+    push 0
+    jmp fin_gt_2
+vrai_gt_2:
+    push 1
+fin_gt_2:
 faux_gt_2:
 sortie_gt_2:
     jz sortie_while_2
@@ -222,7 +218,6 @@ faux_gt_1:
     out eax
 sortie_if_1:
 CODE ENDS
-
 ~~~
 
 ### Résultats :
