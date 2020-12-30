@@ -221,18 +221,18 @@ public class Arbre {
 		 		System.err.println("plusPetitEqlQue");
 		 		code(g,"-", d, file);
 		 		file.println("    pop eax");
-		 		file.println("    jle faux_gt_1");
+		 		file.println("    jle faux_gt_"+cpt);
 		 		file.println("    mov eax,1");
-		 		file.println("    jmp sortie_gt_1");
+		 		file.println("    jmp sortie_gt_"+cpt);
 		 		break;
 		 		
 		 	case "<":
 		 		System.err.println("plusPetitQue");
 		 		code(g,"-", d, file);
 		 		file.println("    pop eax");
-		 		file.println("    jle faux_gt_1");
+		 		file.println("    jle faux_gt_"+cpt);
 		 		file.println("    mov eax,1");
-		 		file.println("    jmp sortie_gt_1");
+		 		file.println("    jmp sortie_gt_"+cpt);
 		 		break;
 		 	
 		 	case "OUTPUT":
@@ -257,37 +257,39 @@ public class Arbre {
 		 	case "WHILE":
 		 		System.err.println("while");
 		 		cpt++;
-		 		file.println("debut_while_"+cpt+":");
+		 		int cptcour = cpt;
+		 		file.println("debut_while_"+cptcour+":");
 			 	 //code condition
 				 	code(g.fg,g.racine,g.fd,file);
-				 file.println("faux_gt_"+cpt+":");
+				 file.println("faux_gt_"+cptcour+":");
 				 //code si condition fausse 
-			 	 file.println("sortie_gt_"+cpt+":");
+			 	 file.println("sortie_gt_"+cptcour+":");
 			 	 //code si condition vraie
-			 		file.println("    jz sortie_while_"+cpt);
+			 		file.println("    jz sortie_while_"+cptcour);
 			 	 	code(d.fg,d.racine,new Arbre(" "),file);
-			 	 	file.println("    jmp debut_while_"+cpt);
+			 	 	file.println("    jmp debut_while_"+cptcour);
 			 	 
-			 	 file.println("sortie_while_"+cpt+":");
+			 	 file.println("sortie_while_"+cptcour+":");
 		 		break;
 		 	
 		 	case "IF":
 		 		System.err.println("if");
 		 		System.out.println(d);
 		 		cpt++;
-		 		file.println("debut_if_"+cpt+":");
+		 		int cptc = cpt;
+		 		file.println("debut_if_"+cptc+":");
 			 	 //code condition
 				 	code(g.fg,g.racine,g.fd,file);
-				 file.println("sortie_gt_"+cpt+":");
+				 file.println("sortie_gt_"+cptc+":");
 				 //code si condition fausse 
 				 code(d.fd.fg,d.fd.racine,new Arbre(" "),file);
 				 
-				 file.println("    jmp sortie_if_"+cpt);
-			 	 file.println("faux_gt_"+cpt+":");
+				 file.println("    jmp sortie_if_"+cptc);
+			 	 file.println("faux_gt_"+cptc+":");
 			 	 //code si condition vraie
 			 	code(d.fg,d.racine,new Arbre(" "),file);
 			 	 	
-			 	 file.println("sortie_if_"+cpt+":");
+			 	 file.println("sortie_if_"+cptc+":");
 		 		break;
 		 		
 		 	case "!":

@@ -15,7 +15,8 @@ debut_if_1:
     sub eax, ebx
     push eax
     pop eax
-    jle valide_gt_1
+    jle faux1
+    jmp sortie_gt_1
     mov eax, a
     mov ebx, 5
     sub eax, ebx
