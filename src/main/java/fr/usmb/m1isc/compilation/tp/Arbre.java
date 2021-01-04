@@ -223,9 +223,12 @@ public class Arbre {
 		 		System.err.println("plusPetitEqlQue");
 		 		code(g,"-", d, file);
 		 		file.println("    pop eax");
-		 		file.println("    jle faux_gt_"+cpt);
-		 		file.println("    mov eax,1");
-		 		file.println("    jmp sortie_gt_"+cpt);
+		 		file.println("    jle vrai_gt_"+cpt);
+		 		file.println("    mov eax, 0");
+				file.println("    jmp fin_gt_"+cpt);
+				file.println("vrai_gt_"+cpt+":");
+		 		file.println("    mov eax, 1");
+		 		file.println("fin_gt_"+cpt+":");
 		 		break;
 		 		
 		 	case "<":
@@ -233,10 +236,34 @@ public class Arbre {
 		 		code(g,"-", d, file);
 		 		file.println("    pop eax");
 		 		file.println("    jl vrai_gt_"+cpt);
-		 		file.println("    push 0");
+		 		file.println("    mov eax, 0");
 		 		file.println("    jmp fin_gt_"+cpt);
 		 		file.println("vrai_gt_"+cpt+":");
-		 		file.println("    push 1");
+		 		file.println("    mov eax, 1");
+		 		file.println("fin_gt_"+cpt+":");
+				 break;
+				 
+			case ">=":
+		 		System.err.println("plusGrdEqlQue");
+		 		code(d,"-", g, file);
+		 		file.println("    pop eax");
+		 		file.println("    jle vrai_gt_"+cpt);
+		 		file.println("    mov eax, 0");
+				file.println("    jmp fin_gt_"+cpt);
+				file.println("vrai_gt_"+cpt+":");
+		 		file.println("    mov eax, 1");
+		 		file.println("fin_gt_"+cpt+":");
+		 		break;
+		 		
+		 	case ">":
+		 		System.err.println("plusGrdQue");
+		 		code(d,"-", g, file);
+		 		file.println("    pop eax");
+		 		file.println("    jl vrai_gt_"+cpt);
+		 		file.println("    mov eax, 0");
+		 		file.println("    jmp fin_gt_"+cpt);
+		 		file.println("vrai_gt_"+cpt+":");
+		 		file.println("    mov eax, 1");
 		 		file.println("fin_gt_"+cpt+":");
 		 		break;
 		 	
@@ -308,7 +335,7 @@ public class Arbre {
 		 		System.err.println("and");
 		 		code(g.fg,"-", g.fd, file);
 		 		file.println("    pop eax");
-		 		file.println("    jle faux"+cpt);
+		 		file.println("    jle faux_gt_"+cpt);
 		 		file.println("    jmp sortie_gt_"+cpt);
 		 		
 		 		code(d.fg,"-", d.fd, file);
@@ -354,12 +381,12 @@ public class Arbre {
 		 PrintWriter f = new PrintWriter(fichier, "UTF-8");
 		 
 		 f.println("DATA SEGMENT");
-		 //Génération des variables
+		 //Gï¿½nï¿½ration des variables
 		 	data(f,var);
 		 f.println("DATA ENDS");
 		 
 		 f.println("CODE SEGMENT");
-		 //Génération du code
+		 //Gï¿½nï¿½ration du code
 		 	code(fg,racine,fd,f);
 		 f.println("CODE ENDS");
 		 
