@@ -26,7 +26,7 @@ public class Main {
 		    	//Reader in0 = new StringReader("let a = 4;\r\nlet b = 3;\r\nif (a < b) or (a < 5)\n\rthen (output b)\n\relse (output a).");
 		    	
 		    	//factorielle
-		    	/*
+		    	
 		    	Reader in0 = new StringReader(
 		    			"let a = input;\r\n" + 
 		    			"let b = 1;\r\n" +
@@ -35,7 +35,7 @@ public class Main {
 		    			"then (output b)\r\n" + 
 		    			"else (\r\n" + 
 		    			"(while (b < a) do (let b = (b + 1); let c = (c * b))); (output c)).");
-		    	*/
+		    	
 		    	yy = new LexicalAnalyzer(in0);
 		    }
 		@SuppressWarnings("deprecation")
@@ -46,8 +46,8 @@ public class Main {
 		
 		System.out.println(a);
 		
-		a.convertToAsm("test.asm");
-		System.out.println("conversion vers machine à registre terminée");
+		a.convertToAsm("factorielle.asm");
+		System.out.println("conversion vers machine Ã  registre terminÃ©e");
 	}
 
 }
